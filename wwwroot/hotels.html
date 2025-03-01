@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels - TraWell</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .hotel-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hotel-image {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .price-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .rating-stars {
+            color: #ffc107;
+            margin-right: 10px;
+        }
+        
+        .amenity-badge {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+            padding: 3px 8px;
+            margin: 2px;
+            font-size: 0.8rem;
+            color: #495057;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .search-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+        }
+        
+        .btn-book {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 50px 0;
+        }
+        
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-map-marked-alt me-2"></i>TraWell
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="places.html">Places</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="hotels.html">Hotels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="packages.html">Packages</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="loginNavItem">
+                        <a class="nav-link" href="auth.html">Login</a>
+                    </li>
+                    <li class="nav-item dropdown d-none" id="userNavItem">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <span id="userNameDisplay">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="bookings.html">My Bookings</a></li>
+                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+    <div class="search-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h1 class="display-4 fw-bold mb-3">Find Your Perfect Stay</h1>
+                    <p class="lead mb-4">Discover comfortable and luxurious hotels for your next adventure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Search Filters -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label fw-semibold">Destination</label>
+                    <select class="form-select" id="destinationFilter">
+                        <option value="">All Destinations</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label fw-semibold">Check-in</label>
+                    <input type="date" class="form-control" id="checkinDate">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label fw-semibold">Check-out</label>
+                    <input type="date" class="form-control" id="checkoutDate">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label fw-semibold">Guests</label>
+                    <select class="form-select" id="guestsFilter">
+                        <option value="1">1 Guest</option>
+                        <option value="2" selected>2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5+ Guests</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label class="form-label fw-semibold">Rooms</label>
+                    <select class="form-select" id="roomsFilter">
+                        <option value="1" selected>1 Room</option>
+                        <option value="2">2 Rooms</option>
+                        <option value="3">3 Rooms</option>
+                        <option value="4">4+ Rooms</option>
+                    </select>
+                </div>
+                <div class="col-md-1 mb-3 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" onclick="searchHotels()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Advanced Filters -->
+            <div class="row mt-3">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label fw-semibold">Price Range</label>
+                    <div class="d-flex align-items-center">
+                        <input type="number" class="form-control me-2" placeholder="Min" id="minPrice">
+                        <span class="text-muted">-</span>
+                        <input type="number" class="form-control ms-2" placeholder="Max" id="maxPrice">
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label fw-semibold">Rating</label>
+                    <select class="form-select" id="ratingFilter">
+                        <option value="">Any Rating</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4+ Stars</option>
+                        <option value="3">3+ Stars</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label fw-semibold">Sort By</label>
+                    <select class="form-select" id="sortFilter">
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="rating_desc">Rating: High to Low</option>
+                        <option value="name_asc">Name: A to Z</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3 d-flex align-items-end">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                        <i class="fas fa-undo"></i> Clear Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Finding the best hotels for you...</p>
+        </div>
+
+        <!-- No Results Message -->
+        <div class="no-results">
+            <i class="fas fa-search fa-5x text-muted mb-4"></i>
+            <h3>No Hotels Found</h3>
+            <p class="text-muted">Try adjusting your search criteria or browse all available hotels.</p>
+            <button class="btn btn-primary" onclick="clearFilters()">Show All Hotels</button>
+        </div>
+
+        <!-- Hotels Grid -->
+        <div id="hotelsContainer" class="row">
+            <!-- Hotels will be loaded here dynamically -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-4">
+            <button id="loadMoreBtn" class="btn btn-outline-primary btn-lg d-none" onclick="loadMoreHotels()">
+                <i class="fas fa-plus-circle me-2"></i>Load More Hotels
+            </button>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Hotel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="bookingForm">
+                        <!-- Booking form will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>TraWell</h5>
+                    <p>Discover the world's most beautiful destinations with personalized travel recommendations.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white-50">Home</a></li>
+                        <li><a href="places.html" class="text-white-50">Places</a></li>
+                        <li><a href="hotels.html" class="text-white-50">Hotels</a></li>
+                        <li><a href="packages.html" class="text-white-50">Packages</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <p class="text-white-50">
+                        <i class="fas fa-envelope me-2"></i>info@trawell.com<br>
+                        <i class="fas fa-phone me-2"></i>+1 (555) 123-4567
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; 2024 TraWell. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let currentPage = 1;
+        let isLoading = false;
+        let hasMoreResults = true;
+        let currentFilters = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+        });
+
+        function initializePage() {
+            // Set default dates
+            setDefaultDates();
+            
+            // Load destinations for filter
+            loadDestinations();
+            
+            // Load initial hotels
+            loadHotels();
+            
+            // Check authentication
+            updateAuthUI();
+        }
+
+        function setDefaultDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('checkinDate').value = today.toISOString().split('T')[0];
+            document.getElementById('checkoutDate').value = tomorrow.toISOString().split('T')[0];
+        }
+
+        async function loadDestinations() {
+            try {
+                const response = await fetch('/api/place');
+                const places = await response.json();
+                
+                const destinationFilter = document.getElementById('destinationFilter');
+                destinationFilter.innerHTML = '<option value="">All Destinations</option>';
+                
+                places.forEach(place => {
+                    const option = document.createElement('option');
+                    option.value = place.id;
+                    option.textContent = place.name;
+                    destinationFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading destinations:', error);
+            }
+        }
+
+        async function loadHotels(page = 1, append = false) {
+            if (isLoading) return;
+            
+            isLoading = true;
+            showLoading(true);
+            
+            try {
+                // Build query parameters
+                const params = new URLSearchParams();
+                if (currentFilters.destination) params.append('placeId', currentFilters.destination);
+                if (currentFilters.minPrice) params.append('minPrice', currentFilters.minPrice);
+                if (currentFilters.maxPrice) params.append('maxPrice', currentFilters.maxPrice);
+                if (currentFilters.rating) params.append('minRating', currentFilters.rating);
+                if (currentFilters.sort) params.append('sortBy', currentFilters.sort);
+                params.append('page', page);
+                params.append('limit', '12');
+
+                const response = await fetch(`/api/hotel?${params}`);
+                const data = await response.json();
+                
+                if (!append) {
+                    document.getElementById('hotelsContainer').innerHTML = '';
+                }
+                
+                if (data.hotels && data.hotels.length > 0) {
+                    renderHotels(data.hotels, append);
+                    hasMoreResults = data.hotels.length === 12;
+                    
+                    // Show/hide load more button
+                    document.getElementById('loadMoreBtn').classList.toggle('d-none', !hasMoreResults);
+                    
+                    // Hide no results message
+                    document.querySelector('.no-results').style.display = 'none';
+                } else if (!append) {
+                    // Show no results message if this is not an append operation
+                    document.querySelector('.no-results').style.display = 'block';
+                    document.getElementById('loadMoreBtn').classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Error loading hotels:', error);
+                showToast('Error loading hotels. Please try again.', 'error');
+            } finally {
+                isLoading = false;
+                showLoading(false);
+            }
+        }
+
+        function renderHotels(hotels, append = false) {
+            const container = document.getElementById('hotelsContainer');
+            
+            hotels.forEach(hotel => {
+                const hotelCard = createHotelCard(hotel);
+                container.appendChild(hotelCard);
+            });
+        }
+
+        function createHotelCard(hotel) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-4 col-md-6 mb-4';
+            
+            const amenitiesHtml = hotel.amenities ? 
+                hotel.amenities.split(',').map(amenity => 
+                    `<span class="amenity-badge">${amenity.trim()}</span>`
+                ).join('') : '';
+            
+            const starsHtml = Array(5).fill().map((_, i) => 
+                `<i class="fas fa-star ${i < hotel.rating ? '' : 'text-muted'}"></i>`
+            ).join('');
+
+            col.innerHTML = `
+                <div class="card hotel-card h-100">
+                    <div class="position-relative">
+                        <img src="${hotel.imageUrl || '/images/default-hotel.jpg'}" 
+                             class="card-img-top hotel-image" alt="${hotel.name}">
+                        <div class="price-badge">₹${hotel.pricePerNight}/night</div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${hotel.name}</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="rating-stars">${starsHtml}</div>
+                            <small class="text-muted">(${hotel.rating}/5)</small>
+                        </div>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            ${hotel.place?.name || 'Location'}
+                        </p>
+                        <p class="card-text">${hotel.description || 'Comfortable accommodation with modern amenities.'}</p>
+                        <div class="amenities mb-3">
+                            ${amenitiesHtml}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-users me-1"></i>Up to ${hotel.capacity || 4} guests
+                            </small>
+                            <button class="btn btn-book" onclick="bookHotel(${hotel.id}, '${hotel.name}', ${hotel.pricePerNight})">
+                                <i class="fas fa-calendar-check me-1"></i>Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+
+        function searchHotels() {
+            // Collect filter values
+            currentFilters = {
+                destination: document.getElementById('destinationFilter').value,
+                minPrice: document.getElementById('minPrice').value,
+                maxPrice: document.getElementById('maxPrice').value,
+                rating: document.getElementById('ratingFilter').value,
+                sort: document.getElementById('sortFilter').value,
+                checkin: document.getElementById('checkinDate').value,
+                checkout: document.getElementById('checkoutDate').value,
+                guests: document.getElementById('guestsFilter').value,
+                rooms: document.getElementById('roomsFilter').value
+            };
+            
+            // Reset pagination
+            currentPage = 1;
+            hasMoreResults = true;
+            
+            // Load hotels with filters
+            loadHotels(1, false);
+        }
+
+        function clearFilters() {
+            // Reset all filter inputs
+            document.getElementById('destinationFilter').value = '';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('ratingFilter').value = '';
+            document.getElementById('sortFilter').value = 'price_asc';
+            document.getElementById('guestsFilter').value = '2';
+            document.getElementById('roomsFilter').value = '1';
+            
+            // Reset dates to default
+            setDefaultDates();
+            
+            // Clear filters and reload
+            currentFilters = {};
+            currentPage = 1;
+            hasMoreResults = true;
+            
+            loadHotels(1, false);
+        }
+
+        function loadMoreHotels() {
+            if (!hasMoreResults || isLoading) return;
+            
+            currentPage++;
+            loadHotels(currentPage, true);
+        }
+
+        function showLoading(show) {
+            document.querySelector('.loading-spinner').style.display = show ? 'block' : 'none';
+        }
+
+        async function bookHotel(hotelId, hotelName, pricePerNight) {
+            if (!isAuthenticated()) {
+                showToast('Please login to book hotels', 'warning');
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Get booking details from filters
+            const checkinDate = document.getElementById('checkinDate').value;
+            const checkoutDate = document.getElementById('checkoutDate').value;
+            const numberOfGuests = parseInt(document.getElementById('guestsFilter').value);
+            const numberOfRooms = parseInt(document.getElementById('roomsFilter').value);
+
+            if (!checkinDate || !checkoutDate) {
+                showToast('Please select check-in and check-out dates', 'warning');
+                return;
+            }
+
+            if (new Date(checkinDate) >= new Date(checkoutDate)) {
+                showToast('Check-out date must be after check-in date', 'warning');
+                return;
+            }
+
+            // Calculate total cost
+            const nights = Math.ceil((new Date(checkoutDate) - new Date(checkinDate)) / (1000 * 60 * 60 * 24));
+            const totalAmount = pricePerNight * nights * numberOfRooms;
+
+            try {
+                // Create payment order
+                const orderData = {
+                    hotelId: hotelId,
+                    checkInDate: checkinDate,
+                    checkOutDate: checkoutDate,
+                    numberOfGuests: numberOfGuests,
+                    numberOfRooms: numberOfRooms,
+                    customerName: getCurrentUser()?.name || 'Guest',
+                    customerEmail: getCurrentUser()?.email || '',
+                    customerPhone: getCurrentUser()?.phone || ''
+                };
+
+                const response = await fetch('/api/payment/create-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    const paymentData = await response.json();
+                    
+                    // Initialize Razorpay payment
+                    initiatePayment(paymentData, {
+                        hotelName: hotelName,
+                        nights: nights,
+                        rooms: numberOfRooms,
+                        totalAmount: totalAmount
+                    });
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to create booking', 'error');
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                showToast('An error occurred while creating the booking', 'error');
+            }
+        }
+
+        function initiatePayment(paymentData, bookingDetails) {
+            const options = {
+                key: paymentData.keyId,
+                amount: paymentData.amount,
+                currency: paymentData.currency,
+                name: 'TraWell',
+                description: `Hotel Booking - ${bookingDetails.hotelName}`,
+                order_id: paymentData.orderId,
+                handler: function(response) {
+                    verifyPayment(response, paymentData.bookingId);
+                },
+                prefill: {
+                    name: paymentData.customerName,
+                    email: paymentData.customerEmail,
+                    contact: paymentData.customerPhone
+                },
+                notes: {
+                    hotel_name: bookingDetails.hotelName,
+                    nights: bookingDetails.nights,
+                    rooms: bookingDetails.rooms
+                },
+                theme: {
+                    color: '#667eea'
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function(response) {
+                showToast('Payment failed. Please try again.', 'error');
+                console.error('Payment failed:', response.error);
+            });
+            
+            rzp.open();
+        }
+
+        async function verifyPayment(paymentResponse, bookingId) {
+            try {
+                const response = await fetch('/api/payment/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify({
+                        paymentId: paymentResponse.razorpay_payment_id,
+                        orderId: paymentResponse.razorpay_order_id,
+                        signature: paymentResponse.razorpay_signature
+                    })
+                });
+
+                if (response.ok) {
+                    showToast('Payment successful! Your hotel is booked.', 'success');
+                    // Redirect to bookings page after a delay
+                    setTimeout(() => {
+                        window.location.href = 'bookings.html';
+                    }, 2000);
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Payment verification failed', 'error');
+                }
+            } catch (error) {
+                console.error('Payment verification error:', error);
+                showToast('An error occurred during payment verification', 'error');
+            }
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toastContainer = document.createElement('div');
+            toastContainer.style.position = 'fixed';
+            toastContainer.style.top = '20px';
+            toastContainer.style.right = '20px';
+            toastContainer.style.zIndex = '9999';
+            
+            const toastClass = type === 'success' ? 'bg-success' : 
+                             type === 'error' ? 'bg-danger' : 
+                             type === 'warning' ? 'bg-warning' : 'bg-info';
+            
+            toastContainer.innerHTML = `
+                <div class="toast ${toastClass} text-white" role="alert">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(toastContainer);
+            
+            const toast = new bootstrap.Toast(toastContainer.querySelector('.toast'));
+            toast.show();
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                toastContainer.remove();
+            }, 5000);
+        }
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</body>
+</html>

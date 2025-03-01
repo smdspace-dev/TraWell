@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraWell - Your Ultimate Travel Companion</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1><i class="fas fa-globe"></i> TraWell</h1>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#packages" class="nav-link">Packages</a>
+                <a href="#hotels" class="nav-link">Hotels</a>
+                <a href="#destinations" class="nav-link">Destinations</a>
+                <a href="#about" class="nav-link">About</a>
+                <div class="nav-auth">
+                    <button class="btn-outline" onclick="showLogin()">Login</button>
+                    <button class="btn-primary" onclick="showRegister()">Sign Up</button>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover Your Next Adventure</h1>
+            <p class="hero-subtitle">Book amazing travel packages and hotels worldwide. Your journey begins here.</p>
+            
+            <!-- Search Form -->
+            <div class="search-container">
+                <div class="search-tabs">
+                    <button class="tab-btn active" data-tab="packages">Tour Packages</button>
+                    <button class="tab-btn" data-tab="hotels">Hotels</button>
+                </div>
+                
+                <div class="search-form" id="packages-search">
+                    <div class="form-group">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="destination" placeholder="Where do you want to go?">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-users"></i>
+                        <select id="guests">
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4+ Guests</option>
+                        </select>
+                    </div>
+                    <button class="search-btn" onclick="searchPackages()">
+                        <i class="fas fa-search"></i> Search Packages
+                    </button>
+                </div>
+
+                <div class="search-form hidden" id="hotels-search">
+                    <div class="form-group">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" id="hotel-destination" placeholder="City or hotel name">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="check-in">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="check-out">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-bed"></i>
+                        <select id="rooms">
+                            <option value="1">1 Room</option>
+                            <option value="2">2 Rooms</option>
+                            <option value="3">3+ Rooms</option>
+                        </select>
+                    </div>
+                    <button class="search-btn" onclick="searchHotels()">
+                        <i class="fas fa-search"></i> Search Hotels
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920" alt="Beautiful landscape">
+        </div>
+    </section>
+
+    <!-- Featured Packages Section -->
+    <section id="packages" class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Travel Packages</h2>
+                <p>Discover handpicked adventures from around the world</p>
+            </div>
+            <div class="packages-grid" id="featured-packages">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+            <div class="text-center">
+                <button class="btn-outline" onclick="loadMorePackages()">View All Packages</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Hotels Section -->
+    <section id="hotels" class="featured-section gray-bg">
+        <div class="container">
+            <div class="section-header">
+                <h2>Luxury Hotels & Resorts</h2>
+                <p>Stay in comfort with our premium hotel selection</p>
+            </div>
+            <div class="hotels-grid" id="featured-hotels">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+            <div class="text-center">
+                <button class="btn-outline" onclick="loadMoreHotels()">View All Hotels</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section id="destinations" class="destinations-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Popular Destinations</h2>
+                <p>Explore the world's most beautiful places</p>
+            </div>
+            <div class="destinations-grid" id="destinations-grid">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Why Choose TraWell?</h2>
+                    <p>We're passionate about creating unforgettable travel experiences. With years of expertise in the travel industry, we offer:</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h3>Secure Booking</h3>
+                                <p>Your bookings are protected with our secure payment system</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>24/7 Support</h3>
+                                <p>Round-the-clock customer support for your peace of mind</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <h3>Best Prices</h3>
+                                <p>Competitive prices with no hidden fees</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500" alt="Travel Experience">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TraWell</h3>
+                    <p>Your ultimate travel companion for amazing adventures worldwide.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#packages">Travel Packages</a></li>
+                        <li><a href="#hotels">Hotels</a></li>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> info@trawell.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Travel Street, Adventure City</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TraWell. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome Back</h3>
+                <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-primary full-width">Login</button>
+            </form>
+            <p class="text-center">
+                Don't have an account? <a href="#" onclick="showRegister()">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Account</h3>
+                <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            </div>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" id="last-name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="date-of-birth">Date of Birth</label>
+                    <input type="date" id="date-of-birth" required>
+                </div>
+                <button type="submit" class="btn-primary full-width">Create Account</button>
+            </form>
+            <p class="text-center">
+                Already have an account? <a href="#" onclick="showLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div class="modal" id="otp-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Email Verification</h3>
+                <span class="close" onclick="closeModal('otp-modal')">&times;</span>
+            </div>
+            <div class="otp-info">
+                <i class="fas fa-envelope-circle-check" style="font-size: 48px; color: #4CAF50; margin-bottom: 20px;"></i>
+                <p>We've sent a 6-digit verification code to your email address.</p>
+                <p><strong id="otp-email-display"></strong></p>
+            </div>
+            <form id="otp-form" onsubmit="handleOtpVerification(event)">
+                <div class="form-group">
+                    <label for="otp-code">Enter Verification Code</label>
+                    <input type="text" id="otp-code" maxlength="6" pattern="[0-9]{6}" 
+                           placeholder="123456" required autocomplete="one-time-code">
+                </div>
+                <div class="otp-actions">
+                    <button type="submit" class="btn-primary full-width">Verify & Complete Registration</button>
+                    <button type="button" class="btn-outline full-width" onclick="resendOtp()">
+                        <i class="fas fa-redo"></i> Resend Code
+                    </button>
+                </div>
+            </form>
+            <div class="otp-help">
+                <p><small>Didn't receive the code? Check your spam folder or try resending.</small></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

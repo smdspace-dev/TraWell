@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraWell Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1><i class="fas fa-globe"></i> TraWell Admin</h1>
+            </div>
+            <div class="nav-auth">
+                <span id="admin-name">Welcome, Admin</span>
+                <button class="btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="menu-link active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a></li>
+            <li><a href="#packages" class="menu-link" onclick="showSection('packages')">
+                <i class="fas fa-box"></i> Tour Packages
+            </a></li>
+            <li><a href="#hotels" class="menu-link" onclick="showSection('hotels')">
+                <i class="fas fa-hotel"></i> Hotels
+            </a></li>
+            <li><a href="#bookings" class="menu-link" onclick="showSection('bookings')">
+                <i class="fas fa-calendar-check"></i> Bookings
+            </a></li>
+            <li><a href="#users" class="menu-link" onclick="showSection('users')">
+                <i class="fas fa-users"></i> Users
+            </a></li>
+            <li><a href="#reviews" class="menu-link" onclick="showSection('reviews')">
+                <i class="fas fa-star"></i> Reviews
+            </a></li>
+            <li><a href="#analytics" class="menu-link" onclick="showSection('analytics')">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="admin-section active">
+            <div class="section-header">
+                <h2>Dashboard Overview</h2>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-packages">Loading...</h3>
+                        <p>Total Packages</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-hotels">Loading...</h3>
+                        <p>Total Hotels</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-bookings">Loading...</h3>
+                        <p>Total Bookings</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-users">Loading...</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Bookings</h3>
+                        <a href="#bookings" onclick="showSection('bookings')">View All</a>
+                    </div>
+                    <div class="recent-list" id="recent-bookings">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Reviews</h3>
+                        <a href="#reviews" onclick="showSection('reviews')">View All</a>
+                    </div>
+                    <div class="recent-list" id="recent-reviews">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Packages Section -->
+        <section id="packages-section" class="admin-section">
+            <div class="section-header">
+                <h2>Tour Packages Management</h2>
+                <button class="btn-primary" onclick="showAddPackageModal()">
+                    <i class="fas fa-plus"></i> Add New Package
+                </button>
+            </div>
+            
+            <div class="filters">
+                <input type="text" id="package-search" placeholder="Search packages..." onkeyup="filterPackages()">
+                <select id="package-filter" onchange="filterPackages()">
+                    <option value="">All Packages</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="data-table-container">
+                <table class="data-table" id="packages-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Destination</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packages-tbody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Hotels Section -->
+        <section id="hotels-section" class="admin-section">
+            <div class="section-header">
+                <h2>Hotels Management</h2>
+                <button class="btn-primary" onclick="showAddHotelModal()">
+                    <i class="fas fa-plus"></i> Add New Hotel
+                </button>
+            </div>
+            
+            <div class="filters">
+                <input type="text" id="hotel-search" placeholder="Search hotels..." onkeyup="filterHotels()">
+                <select id="hotel-filter" onchange="filterHotels()">
+                    <option value="">All Hotels</option>
+                    <option value="5">5 Star</option>
+                    <option value="4">4 Star</option>
+                    <option value="3">3 Star</option>
+                </select>
+            </div>
+
+            <div class="data-table-container">
+                <table class="data-table" id="hotels-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Star Rating</th>
+                            <th>Price/Night</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hotels-tbody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Bookings Section -->
+        <section id="bookings-section" class="admin-section">
+            <div class="section-header">
+                <h2>Bookings Management</h2>
+            </div>
+            
+            <div class="filters">
+                <input type="text" id="booking-search" placeholder="Search bookings..." onkeyup="filterBookings()">
+                <select id="booking-status-filter" onchange="filterBookings()">
+                    <option value="">All Status</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="data-table-container">
+                <table class="data-table" id="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Item</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-tbody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users-section" class="admin-section">
+            <div class="section-header">
+                <h2>Users Management</h2>
+            </div>
+            
+            <div class="filters">
+                <input type="text" id="user-search" placeholder="Search users..." onkeyup="filterUsers()">
+                <select id="user-role-filter" onchange="filterUsers()">
+                    <option value="">All Roles</option>
+                    <option value="User">Users</option>
+                    <option value="Admin">Admins</option>
+                    <option value="Provider">Providers</option>
+                </select>
+            </div>
+
+            <div class="data-table-container">
+                <table class="data-table" id="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Registration Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews-section" class="admin-section">
+            <div class="section-header">
+                <h2>Reviews Management</h2>
+            </div>
+            
+            <div class="filters">
+                <input type="text" id="review-search" placeholder="Search reviews..." onkeyup="filterReviews()">
+                <select id="review-rating-filter" onchange="filterReviews()">
+                    <option value="">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+
+            <div class="reviews-grid" id="reviews-grid">
+                <!-- Dynamic content -->
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="admin-section">
+            <div class="section-header">
+                <h2>Analytics & Reports</h2>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Revenue Overview</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Revenue chart will be displayed here</p>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>Booking Trends</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>Booking trends chart will be displayed here</p>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>Popular Destinations</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie"></i>
+                        <p>Destinations chart will be displayed here</p>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>User Activity</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-area"></i>
+                        <p>User activity chart will be displayed here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Package Modal -->
+    <div class="modal" id="add-package-modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3>Add New Package</h3>
+                <span class="close" onclick="closeModal('add-package-modal')">&times;</span>
+            </div>
+            <form id="add-package-form" onsubmit="handleAddPackage(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="package-title">Title</label>
+                        <input type="text" id="package-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="package-destination">Destination</label>
+                        <input type="text" id="package-destination" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="package-description">Description</label>
+                    <textarea id="package-description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="package-price">Price ($)</label>
+                        <input type="number" id="package-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="package-duration">Duration (days)</label>
+                        <input type="number" id="package-duration" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="package-image">Image URL</label>
+                    <input type="url" id="package-image">
+                </div>
+                <button type="submit" class="btn-primary full-width">Add Package</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Hotel Modal -->
+    <div class="modal" id="add-hotel-modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3>Add New Hotel</h3>
+                <span class="close" onclick="closeModal('add-hotel-modal')">&times;</span>
+            </div>
+            <form id="add-hotel-form" onsubmit="handleAddHotel(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hotel-name">Name</label>
+                        <input type="text" id="hotel-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hotel-location">Location</label>
+                        <input type="text" id="hotel-location" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hotel-description">Description</label>
+                    <textarea id="hotel-description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hotel-price">Price per Night ($)</label>
+                        <input type="number" id="hotel-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hotel-star-rating">Star Rating</label>
+                        <select id="hotel-star-rating" required>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hotel-image">Image URL</label>
+                    <input type="url" id="hotel-image">
+                </div>
+                <button type="submit" class="btn-primary full-width">Add Hotel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading hidden" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+# .NET Build Output
+bin/
+obj/
+out/
+publish/
+*.user
+*.suo
+*.cache
+*.tmp
+*.nuget.props
+*.nuget.targets
+
+# Database Files - CRITICAL: Contains sensitive data
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+TraWell.db
+TraWell-Dev.db
+TraWell-Prod.db
+
+# Configuration Files - CRITICAL: Contains SMTP passwords, JWT keys, API secrets
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.Local.json
+*.config
+.env
+.env.*
+!.env.example
+
+# Security & Authentication - CRITICAL
+*.pfx
+*.p12
+*.key
+*.pem
+certificates/
+secrets.json
+user-secrets/
+
+# Email & SMTP - CRITICAL: Gmail app passwords, credentials
+smtp.json
+email-config.json
+mail-settings.json
+
+# Payment Gateway - CRITICAL: Razorpay/Stripe keys
+razorpay.json
+payment-config.json
+gateway-keys.json
+
+# IDE & Editor
+.vs/
+.vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated
+.DS_Store
+.DS_Store?
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Package Managers
+node_modules/
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Logs & Monitoring
+logs/
+*.log
+*.log.*
+log-*.txt
+audit.json
+trace.json
+
+# Runtime & Compiled
+*.dll
+*.exe
+*.pdb
+*.exp
+*.lib
+*.ilk
+*.map
+*.res
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+*.cobertura.xml
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+*.temp
+
+# Docker
+.dockerignore
+Dockerfile.*
+docker-compose.override.yml
+.docker/
+
+# Azure
+.azure/
+*.azurePubxml
+*.azurePubxml.user
+
+# AWS
+.aws/
+aws-exports.js
+
+# Cloud Functions
+functions/node_modules/
+functions/lib/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*~
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Auto-generated VS/MD/Consulo solution and project files
+ExportedObj/
+.consulo/
+*.csproj.user
+*.unityproj
+*.sln.docstates
+temp/
