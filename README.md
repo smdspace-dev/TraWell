@@ -76,7 +76,7 @@ TraWell is a comprehensive travel recommendation platform built with modern .NET
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/trawell.git
+   git clone https://github.com/smdspace-dev/TraWell
    cd trawell
    ```
 
@@ -212,23 +212,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👥 Authors & Acknowledgments
 
 - **Development Team** - Initial work and ongoing maintenance
-- **Contributors** - Thanks to all contributors who have helped improve this project
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/trawell/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/trawell/discussions)
-- **Email**: support@trawell.com
+- **Contributors** - Thanks to all contributors who have or will help improve this project
 
 ## 🔗 Links
 
 - [Live Demo](https://trawell-demo.azurewebsites.net)
-- [API Documentation](https://trawell-api-docs.com)
-- [Project Roadmap](https://github.com/yourusername/trawell/projects)
+- [Project Roadmap](https://github.com/smdspace-dev/TraWell)
 
 ---
 
 <div align="center">
-  Made with ❤️ by the TraWell Team 
-  Developed and maintained by SMD-Thousif
+  Made for ❤️  The TraWell Team ( Bengaluru )
+  Developed by SMD-Thousif - SWE
 </div>
