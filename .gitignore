@@ -10,6 +10,12 @@ publish/
 *.nuget.props
 *.nuget.targets
 
+# Scripts - Development tools
+*.ps1
+*.bat
+*.sh
+scripts/
+
 # Database Files - CRITICAL: Contains sensitive data
 *.db
 *.db-shm
